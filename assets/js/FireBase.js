@@ -26,6 +26,7 @@ class FireBase {
   #auth;
   #db;
   #classesCollectionRef;
+  #studentsCollectionRef;
   constructor() {
     this.#init();
   }
@@ -41,6 +42,7 @@ class FireBase {
     this.#auth = getAuth(app);
     this.#db = getFirestore(app);
     this.#classesCollectionRef = collection(this.#db, "classes");
+    this.#studentsCollectionRef = collection(this.#db, "students");
   }
 
   // Authentication
@@ -118,6 +120,15 @@ class FireBase {
       await onSnapshot(doc(this.#db, "classes", id), (doc) => {
         callback && typeof callback === "function" && callback(doc.data());
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Students
+  async createStudent(data) {
+    try {
+      await addDoc(this.#studentsCollectionRef, data);
     } catch (error) {
       throw error;
     }
