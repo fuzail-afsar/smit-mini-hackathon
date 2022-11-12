@@ -37,7 +37,7 @@ class CreateClass extends Main {
         schedule,
       });
 
-      //   window.location.assign("classes.html");
+      window.location.assign("classes.html");
     } catch (error) {
       console.log(error);
       console.log(error.message);

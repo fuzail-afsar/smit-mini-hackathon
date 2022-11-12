@@ -79,5 +79,20 @@ class FireBase {
       throw error;
     }
   }
+
+  async getClasses(callback) {
+    try {
+      const q = query(this.#classesCollectionRef);
+      await onSnapshot(q, (querySnapshot) => {
+        const classes = [];
+        querySnapshot.forEach((doc) => {
+          classes.push({ id: doc.id, ...doc.data() });
+        });
+        callback && typeof callback === "function" && callback(classes);
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 window.FireBase = FireBase;
