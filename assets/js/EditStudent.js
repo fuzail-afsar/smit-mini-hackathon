@@ -1,7 +1,8 @@
 const form = document.getElementsByTagName("form")[0];
 
-class CreateClass extends Main {
+class EditStudent extends Main {
   #formValidation = new FormValidation(form);
+  #id;
   constructor() {
     super();
     this.#init();
@@ -9,24 +10,55 @@ class CreateClass extends Main {
 
   async #init() {
     await this._init();
+    this.#id = Helper.getParams().id;
+    if (!this.#id) return window.location.assign("students.html");
+    this.#renderClassDataInDom(this.#id);
     this.#initEvents();
-    this.#renderClassDataInForm();
   }
 
   #initEvents() {
     form.addEventListener("submit", this.#formSubmitHandler.bind(this));
   }
 
-  async #renderClassDataInForm() {
+  async #renderClassDataInDom(id) {
+    const teachersNameElem = document.getElementsByName("teachersName")[0];
+
     await this._fireBase.getClasses((classes) => {
       let teacherOptionHtml = "";
       classes.forEach(({ id, teacher_name }) => {
         teacherOptionHtml += this.#selectOptionHtml(teacher_name, id);
       });
 
-      document
-        .getElementsByName("teachersName")[0]
-        .insertAdjacentHTML("beforeend", teacherOptionHtml);
+      teachersNameElem.insertAdjacentHTML("beforeend", teacherOptionHtml);
+    });
+
+    await this._fireBase.getStudent(id, (data) => {
+      const {
+        name,
+        father_name,
+        roll_no,
+        contact_number,
+        cnic,
+        course,
+        class_id,
+      } = data;
+      const [
+        nameElem,
+        fatherNameElem,
+        rollNoElem,
+        contactNumberElem,
+        cnicNoElem,
+        courseNameElem,
+      ] = form.getElementsByTagName("input");
+
+      // Set Form Values
+      nameElem.value = name;
+      fatherNameElem.value = father_name;
+      rollNoElem.value = roll_no;
+      contactNumberElem.value = contact_number;
+      cnicNoElem.value = cnic;
+      courseNameElem.value = course;
+      teachersNameElem.value = class_id;
     });
   }
 
@@ -52,7 +84,7 @@ class CreateClass extends Main {
         teachersName,
       ] = event.target;
 
-      await this._fireBase.createStudent({
+      await this._fireBase.editStudent(this.#id, {
         name: name.value,
         father_name: fatherName.value,
         roll_no: rollNo.value,
@@ -61,7 +93,6 @@ class CreateClass extends Main {
         course: courseName.value,
         class_id: teachersName.value,
       });
-      window.location.assign("students.html");
     } catch (error) {
       console.log(error);
       console.log(error.message);
@@ -70,4 +101,4 @@ class CreateClass extends Main {
     }
   }
 }
-(() => new CreateClass())();
+(() => new EditStudent())();

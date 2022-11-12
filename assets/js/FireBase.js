@@ -133,5 +133,46 @@ class FireBase {
       throw error;
     }
   }
+
+  async getStudents(callback) {
+    try {
+      const q = query(this.#studentsCollectionRef);
+      await onSnapshot(q, (querySnapshot) => {
+        const students = [];
+        querySnapshot.forEach((doc) => {
+          students.push({ id: doc.id, ...doc.data() });
+        });
+        callback && typeof callback === "function" && callback(students);
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteStudent(id) {
+    try {
+      await deleteDoc(doc(this.#db, "students", id));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async editStudent(id, data) {
+    try {
+      await updateDoc(doc(this.#db, "students", id), data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getStudent(id, callback) {
+    try {
+      await onSnapshot(doc(this.#db, "students", id), (doc) => {
+        callback && typeof callback === "function" && callback(doc.data());
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 window.FireBase = FireBase;
