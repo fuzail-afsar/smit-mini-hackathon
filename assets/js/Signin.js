@@ -22,8 +22,7 @@ class Signin extends Main {
     try {
       this._showLoader();
       const [email, password] = event.target;
-      const g = await this._fireBase.signIn(email.value, password.value);
-      console.log(g);
+      await this._fireBase.signIn(email.value, password.value);
       window.location.assign("index.html");
     } catch (error) {
       console.log(error);

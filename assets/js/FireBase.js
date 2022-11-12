@@ -23,7 +23,7 @@ import {
 class FireBase {
   #auth;
   #db;
-  #usersCollectionRef;
+  #classesCollectionRef;
   constructor() {
     this.#init();
   }
@@ -38,9 +38,10 @@ class FireBase {
     });
     this.#auth = getAuth(app);
     this.#db = getFirestore(app);
-    this.#usersCollectionRef = collection(this.#db, "users");
+    this.#classesCollectionRef = collection(this.#db, "classes");
   }
 
+  // Authentication
   isLoggedIn() {
     return new Promise((resolve, reject) => {
       onAuthStateChanged(this.#auth, (user) => {
@@ -70,22 +71,13 @@ class FireBase {
     return this.#auth.currentUser;
   }
 
-  getUser() {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const querySnapshot = await getDocs(
-          query(
-            this.#usersCollectionRef,
-            where("email", "==", this.getUserProfile().email)
-          )
-        );
-        querySnapshot.forEach((doc) => {
-          resolve({ ...doc.data(), id: doc.id });
-        });
-      } catch (error) {
-        reject(error);
-      }
-    });
+  // Classes
+  async createClass(data) {
+    try {
+      await addDoc(this.#classesCollectionRef, data);
+    } catch (error) {
+      throw error;
+    }
   }
 }
 window.FireBase = FireBase;
