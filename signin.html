@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Libraries Style -->
+    <link
+      rel="stylesheet"
+      href="./assets/libraries/bootstrap/css/bootstrap.min.css"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/auth.css" />
+
+    <title>SMIT Attendance</title>
+  </head>
+  <body>
+    <!-- Loader -->
+    <div class="loader">
+      <div class="spinner-grow text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <section>
+      <div class="container">
+        <div class="row justify-content-center align-items-center vh-100">
+          <div class="col-sm-7 col-md-5 col-lg-4 text-center">
+            <h1 class="fw-bold">Sign In</h1>
+            <form>
+              <div class="mb-3">
+                <input
+                  type="email"
+                  class="form-control required email"
+                  placeholder="Email"
+                  name="email"
+                />
+              </div>
+              <div class="mb-3">
+                <input
+                  type="password"
+                  class="form-control required password"
+                  placeholder="Password"
+                  name="password"
+                />
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-primary w-100 fw-semibold">
+                  Sign In
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Libraries JS -->
+    <script src="./assets/libraries/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script src="./assets/js/FormValidation.js"></script>
+    <script src="./assets/js/FireBase.js" type="module"></script>
+    <script src="./assets/js/Main.js"></script>
+    <script src="./assets/js/Signin.js" type="module"></script>
+  </body>
+</html>
