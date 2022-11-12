@@ -12,6 +12,7 @@ import {
   setDoc,
   getDocs,
   addDoc,
+  updateDoc,
   deleteDoc,
   getFirestore,
   collection,

@@ -27,10 +27,22 @@ class EditClass extends Main {
         section_name,
         course_name,
         batch_number,
-        timings,
+        timings: time,
         schedule,
       } = data;
-      console.log(form.children);
+      const [teachersName, sectionName, courseName, batchNumber, timings] =
+        form.getElementsByTagName("input");
+
+      // Set Form Values
+      teachersName.value = teacher_name;
+      sectionName.value = section_name;
+      courseName.value = course_name;
+      batchNumber.value = batch_number;
+      timings.value = time;
+      schedule.forEach((sch) => {
+        const scheduleElem = document.getElementById(sch.toLowerCase());
+        if (scheduleElem) scheduleElem.checked = true;
+      });
     });
   }
 
@@ -46,7 +58,7 @@ class EditClass extends Main {
         .querySelectorAll('input[name="schedule"]:checked')
         .forEach((sch) => schedule.push(sch.value));
 
-      await this._fireBase.editClass({
+      await this._fireBase.editClass(this.#id, {
         teacher_name: teachersName.value,
         section_name: sectionName.value,
         course_name: courseName.value,
