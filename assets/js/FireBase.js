@@ -12,6 +12,7 @@ import {
   setDoc,
   getDocs,
   addDoc,
+  deleteDoc,
   getFirestore,
   collection,
   query,
@@ -89,6 +90,32 @@ class FireBase {
           classes.push({ id: doc.id, ...doc.data() });
         });
         callback && typeof callback === "function" && callback(classes);
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteClass(id) {
+    try {
+      await deleteDoc(doc(this.#db, "classes", id));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async editClass(id, data) {
+    try {
+      await updateDoc(doc(this.#db, "classes", id), data);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getClass(id, callback) {
+    try {
+      await onSnapshot(doc(this.#db, "classes", id), (doc) => {
+        callback && typeof callback === "function" && callback(doc.data());
       });
     } catch (error) {
       throw error;

@@ -1,3 +1,4 @@
+const tbodyElem = document.getElementsByTagName("tbody")[0];
 class Classes extends Main {
   constructor() {
     super();
@@ -6,37 +7,52 @@ class Classes extends Main {
 
   async #init() {
     await this._init();
-    this.#loadClasses();
+    this.#initEvents();
+    this.#renderClassesInDom();
   }
 
-  async #loadClasses() {
-    await this._fireBase.getClasses((classes) => console.log(classes));
+  #initEvents() {
+    tbodyElem.addEventListener("click", this.#tbodyElemClickHandler.bind(this));
   }
 
-  #classRowHtml(data) {
-    const {
-      teacher_name,
-      section_name,
-      course_name,
-      batch_number,
-      timings,
-      schedule,
-    } = data;
+  async #renderClassesInDom() {
+    await this._fireBase.getClasses((classes) => {
+      let html = "";
+      classes.forEach((data, index) => {
+        html += this.#classRowHtml(data, index);
+      });
+      tbodyElem.innerHTML = html;
+    });
+  }
+
+  #classRowHtml(data, index) {
+    const { id, teacher_name, course_name, batch_number } = data;
     return `
     <tr>
-        <th scope="row">1</th>
+        <th scope="row">${index + 1}</th>
         <td>${teacher_name}</td>
         <td>${course_name}</td>
         <td>${batch_number}</td>
         <td>
-        <button type="button" class="btn btn-primary">
+        <a href="./edit-class.html?id=${id}" type="button" class="btn btn-primary">
             <i class="las fs-5 la-eye"></i>
-        </button>
-        <button type="button" class="btn btn-danger">
+        </a>
+        <button type="button" data-id="${id}" class="delete btn btn-danger">
             <i class="las fs-5 la-trash-alt"></i>
         </button>
         </td>
     </tr>`;
+  }
+
+  //   Handlers
+  async #tbodyElemClickHandler(event) {
+    const { target } = event;
+
+    const deleteBtnElem = target.closest(".delete");
+
+    if (!deleteBtnElem) return;
+    const { id } = deleteBtnElem.dataset;
+    await this._fireBase.deleteClass(id);
   }
 }
 (() => new Classes())();
